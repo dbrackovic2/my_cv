@@ -1,67 +1,87 @@
-import React from 'react'
-import { PhoneIcon, MapPinIcon, EnvelopeIcon } from '@heroicons/react/24/solid'
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { PageInfo } from '@/typings';
+import React from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { PhoneIcon, MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { PageInfo } from "@/typings";
+import Image from "next/image";
+import { MessageList } from "@/components/message-list";
+import { NewMessageForm } from "@/components/new-message-form";
 
 type Inputs = {
   name: string;
   email: string;
   subject: string;
   message: string;
-}
+};
 
 type Props = {
   pageInfo: PageInfo;
-}
+};
 
-function ContactMe({pageInfo}: Props) {
-  const { handleSubmit, register } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (formData) => {
-    window.location.href = `mailto:${pageInfo.email}?subject=
-    {formData.subject}&body=Hi, my name is ${formData.name}. ${formData.message} ${formData.email}`;
-  };
+function ContactMe({ pageInfo }: Props) {
+  const { data: session, status } = useSession();
 
   return (
-    <div className='h-screen flex relative flex-col text-center md:text-left
-    md:flex-row max-w-7xl justify-evenly mx-auto items-center'>
-         <h3 className='absolute top-24 uppercase tracking-[20px] text-gray-500 opacity-20 text-2xl'>
-            Contact
-        </h3>
+    <div
+      className="h-screen flex relative flex-col text-center md:text-left
+    md:flex-row max-w-7xl justify-evenly mx-auto items-center"
+    >
+      <h3 className="absolute top-24 uppercase tracking-[20px] text-gray-500 opacity-20 text-2xl">
+        Contact
+      </h3>
 
-        <div className='flex flex-col space-y-3 md:space-y-6 lg:space-y-10'>
-            <h4 className='text:4xs md:text-4sm lg:text-4xl font-semibold text-center'>
-                <span className='decoration-[#0ab0f7]/50 italic'>Contact information</span>
-            </h4>
-
-            <div className='space-y-3 md:space-y-6 lg:space-y-10'>
-              <div className='flex items-center space-x-5 pl-10'>
-                <PhoneIcon className='text-[#0ab0f7] h-2 w-2 md:h-5 md:w-5 xl:h-7 xl:w-7 animate-pulse' />
-                <p className='text-xs md:text-sm xl:text-2xl'>+123456789</p>
-              </div>
-
-              <div className='flex items-center space-x-5 pl-10'>
-                <EnvelopeIcon className='text-[#0ab0f7] h-2 w-2 md:h-5 md:w-5 xl:h-7 xl:w-7 animate-pulse' />
-                <p className='text-xs md:text-sm xl:text-2xl'>{pageInfo.email}</p>
-              </div>
-
-              <div className='flex items-center space-x-5 pl-10'>
-                <MapPinIcon className='text-[#0ab0f7] h-2 w-2 md:h-5 md:w-5 xl:h-7 xl:w-7 animate-pulse' />
-                <p className='text-xs md:text-sm xl:text-2xl'>{pageInfo.address}</p>
+      <div className="flex flex-col space-y-3 md:space-y-6 lg:space-y-10">
+        {session ? (
+          <>
+            <div className="flex space-x-1">
+              {session?.user?.image && (
+                <div className="w-12 h-12 rounded overflow-hidden">
+                  <Image
+                    width={50}
+                    height={50}
+                    src={session?.user?.image}
+                    alt={session?.user?.name || "User profile picture"}
+                    title={session?.user?.name || "User profile picture"}
+                  />
+                </div>
+              )}
+              <button
+                onClick={() => signOut()}
+                className="bg-white/5 rounded h-12 px-6 font-medium text-white border border-transparent"
+              >
+                Sign out
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-scroll no-scrollbar p-6">
+              <div className="max-w-4xl mx-auto">
+                <div className="flex justify-between items-center">
+                  <MessageList />
+                </div>
               </div>
             </div>
-
-            <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col space-y-2 w-fit mx-auto'>
-              <div className='flex space-x-2'>
-                <input {...register('name')} placeholder='Name' className="contactInput" type='text' />
-                <input {...register('email')} placeholder='Email' className="contactInput" type='email' />
+            <div className="p-6 bg-white/5 border-t border-[#363739]">
+              <div className="max-w-4xl mx-auto">
+                <NewMessageForm />
               </div>
-              <input {...register('subject')} placeholder='Subject' className="contactInput" type='text' />
-              <textarea {...register('message')} placeholder='Message' className='contactInput' />
-              <button type='submit' className='bg-[#0ab0f7] py-5 px-10 rounded-md text-black fond-bold text-xs md:text-sm lg:text-lg'>Submit</button>
-            </form>
-        </div>
+            </div>
+          </>
+        ) : (
+          <div className="h-full flex items-center justify-center flex-col space-y-2.5">
+            {status === "loading" ? null : (
+              <div className="flex items-center">
+                <button
+                  onClick={() => signIn("github")}
+                  className="bg-white/5 rounded h-12 px-6 font-medium text-white text-lg border border-transparent inline-flex items-center"
+                >
+                  Sign in with GitHub
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
-  )
+  );
 }
 
-export default ContactMe
+export default ContactMe;
