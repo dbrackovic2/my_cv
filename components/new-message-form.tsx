@@ -23,7 +23,7 @@ export const NewMessageForm = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        console.log(`error is ${e.toString()}`)
+        console.log(e);
         if (body) {
           addNewMessage({
             variables: {

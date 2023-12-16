@@ -1,24 +1,21 @@
 import React from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { PhoneIcon, MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { PageInfo } from "@/typings";
 import Image from "next/image";
 import { MessageList } from "@/components/message-list";
 import { NewMessageForm } from "@/components/new-message-form";
 
-type Inputs = {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-};
+// type Inputs = {
+//   name: string;
+//   email: string;
+//   subject: string;
+//   message: string;
+// };
 
-type Props = {
-  pageInfo: PageInfo;
-};
+// type Props = {
+//   pageInfo: PageInfo;
+// };
 
-function ContactMe({ pageInfo }: Props) {
+function ContactMe() {
   const { data: session, status } = useSession();
 
   return (
@@ -32,7 +29,7 @@ function ContactMe({ pageInfo }: Props) {
 
       <div className="flex flex-col space-y-3 md:space-y-6 lg:space-y-10">
         {session ? (
-          <>
+          <div>
             <div className="flex space-x-1">
               {session?.user?.image && (
                 <div className="w-12 h-12 rounded overflow-hidden">
@@ -64,7 +61,7 @@ function ContactMe({ pageInfo }: Props) {
                 <NewMessageForm />
               </div>
             </div>
-          </>
+          </div>
         ) : (
           <div className="h-full flex items-center justify-center flex-col space-y-2.5">
             {status === "loading" ? null : (

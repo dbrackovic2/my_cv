@@ -32,7 +32,7 @@ export const MessageList = () => {
     messageCollection: { edges: { node: IMessage }[] };
   }>(GetRecentMessagesQuery, {
     variables: {
-      "last": 100,
+      "last": 10,
     },
   });
 
@@ -51,7 +51,7 @@ export const MessageList = () => {
 
   if (error)
     return (
-      <p className="text-white">Something went wrong. {error.toString()}</p>
+      <p className="text-white">Something went wrong. {error.toString()} <br></br> <button>Get Again</button></p>
     );
 
   return (
