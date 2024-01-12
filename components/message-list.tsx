@@ -6,7 +6,7 @@ import type { Message as IMessage } from "@/components/message";
 import { Message } from "@/components/message";
 
 const GetRecentMessagesQuery = gql`
-  query GetRecentMessages($last: Int) @live {
+  query GetRecentMessages($last: Int) {
     messageCollection(last: $last) {
       edges {
         node {
