@@ -2,22 +2,44 @@ import { gql, useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
+type Props = {
+  chatId: string;
+  refresh: () => {};
+};
+
 const AddNewMessageMutation = gql`
-  mutation AddNewMessage($username: String!, $avatar: URL, $body: String!) {
-    messageCreate(
-      input: { username: $username, avatar: $avatar, body: $body }
-    ) {
-      message {
-        id
-      }
+  mutation AddNewMessage($username: String!, $receiverUsername: String!, $avatar: URL, $body: String!) {
+    mongoDB {
+      messageCreate(
+        input: { username: $username, receiverUsername: $receiverUsername, avatar: $avatar, body: $body }
+      ) { insertedId }
     }
   }
 `;
 
-export const NewMessageForm = () => {
+const PopNewMessageToChatMutation = gql`
+mutation UpdateChatByID ($messages: [String!]!, $id: ID!){
+  mongoDB {
+    chatUpdate(by: {
+      id: $id
+    },
+    input: {
+        messages: {
+          push: {
+            each: $messages
+          }
+        }
+      })
+    { modifiedCount }
+  }
+}
+`;
+
+export const NewMessageForm = ({chatId, refresh}: Props) => {
   const { data: session } = useSession();
   const [body, setBody] = useState("");
   const [addNewMessage] = useMutation(AddNewMessageMutation);
+  const [popMessageToChat] = useMutation(PopNewMessageToChatMutation);
 
   return (
     <form
@@ -28,10 +50,18 @@ export const NewMessageForm = () => {
           addNewMessage({
             variables: {
               username: session?.username ?? "",
+              receiverUsername: session?.username != "dbrackovic2" ? "dbrackovic2" : "",
               avatar: session?.user?.image,
               body,
             },
-          });
+          }).then(({data})=> {
+            popMessageToChat({
+              variables: {
+                messages: [data.mongoDB.messageCreate.insertedId],
+                id: chatId,
+              }
+            })
+          }).then(refresh);
           setBody("");
         }
       }}
@@ -52,6 +82,12 @@ export const NewMessageForm = () => {
         disabled={!body || !session}
       >
         Send
+      </button>
+      <button
+       className="bg-[#222226] rounded h-12 font-medium text-white w-24 text-lg border border-transparent hover:bg-[#363739] transition"
+       onClick={refresh}
+      >
+        Fetch
       </button>
     </form>
   );
