@@ -62,4 +62,4 @@ function ExperienceCard({experience}: Props) {
   )
 }
 
-export default ExperienceCard
+export default ExperienceCard;

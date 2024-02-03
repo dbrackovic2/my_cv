@@ -40,4 +40,4 @@ function Skill({ skill, directionLeft }: Props) {
   )
 }
 
-export default Skill
+export default Skill;

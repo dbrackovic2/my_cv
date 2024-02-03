@@ -39,4 +39,4 @@ function orderedExperiences(experiences: Experience[]): Experience[] {
     return experiences.sort((a: Experience, b: Experience) => Number(new Date(a.dateStarted)) - Number(new Date(b.dateStarted)));
 }
 
-export default WorkExperience
+export default WorkExperience;

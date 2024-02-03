@@ -49,7 +49,7 @@ function About({pageInfo}: Props) {
             </h4>
             <div>
                 {
-                    splitStringOnDot(pageInfo?.backgroundInformation).map(str => <p className='text-base'>{str}</p>)
+                    splitStringOnDot(pageInfo?.backgroundInformation).map(str => <p key={str} className='text-base'>{str}</p>)
                 }
             </div>
         </div>
@@ -61,4 +61,4 @@ function splitStringOnDot (text: string):string[] {
     return text.split('.');
 }
 
-export default About
+export default About;

@@ -72,11 +72,11 @@ function Projects({projects}: Props) {
                                 })
                             }
                         </div>
-                        <p className='text-left md:text-left'>
+                        <span className='text-left'>
                             {
-                                splitStringOnDot(project.summary).map(str => <p className='text-xs md:text-base lg:text-lg'>- {str}</p>)
+                                splitStringOnDot(project.summary).map(str => <p key={str} className='text-xs md:text-base lg:text-lg'>- {str}</p>)
                             }
-                        </p>
+                        </span>
                     </div>
                 </div>
                 )
@@ -96,4 +96,4 @@ function orderedProjects(projects: Project[]): Project[] {
     return projects.sort((a: Project, b: Project) => b.technologies.length - a.technologies.length);
 }
 
-export default Projects
+export default Projects;
