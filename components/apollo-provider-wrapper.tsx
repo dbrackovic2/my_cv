@@ -8,9 +8,12 @@ import {
   split,
   from,
 } from "@apollo/client";
+import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
 import { SSELink, isLiveQuery } from "@grafbase/apollo-link";
 import { getOperationAST } from "graphql";
 import { setContext } from "@apollo/client/link/context";
+
+const removeTypenameLink = removeTypenameFromVariables();
 
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAFBASE_API_URL,
@@ -38,6 +41,7 @@ export const ApolloProviderWrapper = ({ children }: PropsWithChildren) => {
     return new ApolloClient({
       link: from([
         authMiddleware,
+        removeTypenameLink,
         split(
           ({ query, operationName, variables }) =>
             isLiveQuery(getOperationAST(query, operationName), variables),
@@ -45,7 +49,7 @@ export const ApolloProviderWrapper = ({ children }: PropsWithChildren) => {
           httpLink
         ),
       ]),
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({addTypename: false}),
     });
   }, []);
 
