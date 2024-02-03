@@ -5,6 +5,7 @@ import Image from "next/image";
 export type Message = {
   id: string;
   username: string;
+  receiverUsername: string;
   avatar?: string;
   body: string;
   createdAt: string;
@@ -13,6 +14,8 @@ export type Message = {
 interface Props {
   message: Message;
 }
+
+const getMongoDBIdTimestamp = (id: string) => parseInt(id.substring(0,8), 16)* 1000;
 
 export const Message = ({ message }: Props) => {
   const { data: session } = useSession();
@@ -61,9 +64,9 @@ export const Message = ({ message }: Props) => {
         </span>
       </div>
       <p className="text-xs text-white/50">
-        {differenceInHours(new Date(), new Date(message.createdAt)) >= 1
-          ? formatRelative(new Date(message.createdAt), new Date())
-          : formatDistance(new Date(message.createdAt), new Date(), {
+        {differenceInHours(new Date(), new Date(getMongoDBIdTimestamp(message.id))) >= 1
+          ? formatRelative(new Date(getMongoDBIdTimestamp(message.id)), new Date())
+          : formatDistance(new Date(getMongoDBIdTimestamp(message.id)), new Date(), {
               addSuffix: true,
             })}
       </p>
