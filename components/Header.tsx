@@ -67,4 +67,4 @@ function Header({socials}: Props) {
   )
 }
 
-export default Header
+export default Header;

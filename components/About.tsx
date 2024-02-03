@@ -61,4 +61,4 @@ function splitStringOnDot (text: string):string[] {
     return text.split('.');
 }
 
-export default About
+export default About;

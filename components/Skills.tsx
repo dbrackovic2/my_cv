@@ -42,4 +42,4 @@ function orderedSkills(skills: Skill[]): Skill[] {
     return skills.sort((a: Skill, b: Skill) => b.progress - a.progress);
 }
 
-export default Skills
+export default Skills;

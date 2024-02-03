@@ -96,4 +96,4 @@ function orderedProjects(projects: Project[]): Project[] {
     return projects.sort((a: Project, b: Project) => b.technologies.length - a.technologies.length);
 }
 
-export default Projects
+export default Projects;

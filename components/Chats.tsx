@@ -84,4 +84,4 @@ export const Chats = ({username}: Props) => {
       ))}
     </div>
   );
-}
+};
