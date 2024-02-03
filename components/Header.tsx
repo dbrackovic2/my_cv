@@ -38,7 +38,7 @@ function Header({socials}: Props) {
                 />
             )}
         </motion.div>
-        <Link href='#contact'>
+        <Link as='div' href='#contact'>
             <motion.div 
                 initial={{
                     x: 500,
@@ -52,7 +52,7 @@ function Header({socials}: Props) {
                 }}
                 transition={{ duration : 1 }}
                 className='flex flex-row items-center cursor-pointer'>
-                <SocialIcon 
+                <SocialIcon
                     className='cursor-pointer'
                     network='email'
                     fgColor='white' 
