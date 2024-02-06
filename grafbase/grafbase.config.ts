@@ -3,7 +3,7 @@ import { config, connector, graph, auth } from '@grafbase/sdk';
 const g = graph.Single();
 
 const provider = auth.JWT({
-    issuer: "nextauth", secret: g.env('NEXTAUTH_SECRET'),
+    issuer: g.env('NEXTAUTH_ISSUER'), secret: g.env('NEXTAUTH_SECRET'),
 });
 
 const mongo = connector.MongoDB('MongoDB', {
