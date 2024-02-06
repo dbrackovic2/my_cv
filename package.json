@@ -25,7 +25,8 @@
     "react-social-icons": "^5.15.0",
     "styled-components": "^6.0.0",
     "tailwindcss": "3.3.3",
-    "typescript": "5.1.6"
+    "typescript": "5.1.6",
+    "type-fest": "^4.0.0"
   },
   "devDependencies": {
     "@grafbase/sdk": "~0.17.0",
