@@ -1,6 +1,6 @@
 import { config, connector, graph, auth } from '@grafbase/sdk';
 
-const g = graph.Single();
+const g = graph.Standalone();
 
 const provider = auth.JWT({
     issuer: g.env('NEXTAUTH_ISSUER'), secret: g.env('NEXTAUTH_SECRET'),
